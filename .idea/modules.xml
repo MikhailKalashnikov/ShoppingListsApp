@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ShoppingLists.iml" filepath="$PROJECT_DIR$/ShoppingLists.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageBarLib/messageBarLib.iml" filepath="$PROJECT_DIR$/messageBarLib/messageBarLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pinned-section-listview/pinned-section-listview.iml" filepath="$PROJECT_DIR$/pinned-section-listview/pinned-section-listview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shoppingLists/shoppingLists.iml" filepath="$PROJECT_DIR$/shoppingLists/shoppingLists.iml" />
+    </modules>
+  </component>
+</project>

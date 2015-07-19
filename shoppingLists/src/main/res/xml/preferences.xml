@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference 
+        android:key="pref_use_category" 
+        android:title="@string/pref_category"
+        android:defaultValue="true"/>
+    
+    <CheckBoxPreference 
+        android:key="pref_category_main_screen" 
+        android:title="@string/pref_category_main_screen"
+        android:summary="@string/pref_category_main_screen_summary"
+        android:defaultValue="true"
+        android:dependency="pref_use_category"/>
+    
+</PreferenceScreen>
