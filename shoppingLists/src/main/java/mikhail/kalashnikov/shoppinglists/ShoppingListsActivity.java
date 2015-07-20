@@ -1,26 +1,23 @@
 package mikhail.kalashnikov.shoppinglists;
 
-import java.util.List;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.ActionBar.TabListener;
-import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
-public class ShoppingListsActivity extends SherlockFragmentActivity
-		implements AddNewListDialog.AddNewListDialogListener, TabListener{
+import java.util.List;
+
+public class ShoppingListsActivity extends AppCompatActivity
+		implements AddNewListDialog.AddNewListDialogListener, ActionBar.TabListener {
 	private final String TAG = getClass().getSimpleName();
 	private static final String MODEL="model";
 	private ModelFragment model=null;
@@ -49,7 +46,7 @@ public class ShoppingListsActivity extends SherlockFragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	getSupportMenuInflater().inflate(R.menu.actions, menu);
+    	getMenuInflater().inflate(R.menu.actions, menu);
     	return super.onCreateOptionsMenu(menu);
     }
     
@@ -67,7 +64,7 @@ public class ShoppingListsActivity extends SherlockFragmentActivity
     			addNewlListDialog.show(getSupportFragmentManager(), "AddNewListDialog");
     			return true;
     		case R.id.mi_del_list:
-    			SherlockDialogFragment dialog = new SherlockDialogFragment(){
+    			DialogFragment dialog = new DialogFragment(){
     				@Override
     				public Dialog onCreateDialog(Bundle savedInstanceState) {
     					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -137,7 +134,7 @@ public class ShoppingListsActivity extends SherlockFragmentActivity
     }
 
 	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 		Log.d(TAG, "onTabSelected model.isDataUploaded()=" + model.getModel().isDataUploaded());
 		long id=((Long) tab.getTag()).longValue();
 
@@ -147,12 +144,12 @@ public class ShoppingListsActivity extends SherlockFragmentActivity
 	}
 
 	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
 		// unused	
 	}
 
 	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 		// unused
 	}
 

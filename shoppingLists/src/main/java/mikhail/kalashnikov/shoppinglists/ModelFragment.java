@@ -3,17 +3,16 @@ package mikhail.kalashnikov.shoppinglists;
 import java.util.List;
 import java.util.Map;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
 import mikhail.kalashnikov.shoppinglists.ShoppingListDBHelper.ShoppingDataListener;
 
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
-public class ModelFragment extends SherlockFragment implements ShoppingDataListener {
+public class ModelFragment extends Fragment implements ShoppingDataListener {
 	private final String TAG = getClass().getSimpleName();
 	private DataModel model;
 

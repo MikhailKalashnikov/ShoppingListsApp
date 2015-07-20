@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +12,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class AddNewItemDialog extends SherlockDialogFragment implements OnEditorActionListener{
+public class AddNewItemDialog extends DialogFragment implements OnEditorActionListener{
 	public static final String KEY_MODE = "mode";
 	public static final String KEY_ITEM_ID = "item_id";
 	public static final String KEY_LIST_ITEM_ID = "list_item_id";

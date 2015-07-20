@@ -6,12 +6,6 @@ import java.util.List;
 import net.simonvt.messagebar.MessageBar;
 import net.simonvt.messagebar.MessageBar.OnMessageClickListener;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.hb.views.PinnedSectionListView.PinnedSectionListAdapter;
 
 import android.app.AlertDialog;
@@ -24,8 +18,15 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.ListFragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,7 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListItemsFragment extends SherlockListFragment 
+public class ListItemsFragment extends ListFragment
 		implements AddItemToListDialog.AddItemToListDialogListener, AddNewItemDialog.AddNewItemDialogListener, 
 			AddNewItemDialog.EditListItemDialogListener,
 			OnItemLongClickListener, OnSharedPreferenceChangeListener {
@@ -130,13 +131,13 @@ public class ListItemsFragment extends SherlockListFragment
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()){
     		case R.id.mi_add_item_to_list:
-    			SherlockDialogFragment addItemToListDialog = new AddItemToListDialog();
+    			DialogFragment addItemToListDialog = new AddItemToListDialog();
     			addItemToListDialog.setTargetFragment(this, 0);
     			addItemToListDialog.show(getActivity().getSupportFragmentManager(), "AddListItemDialog");
     			return true;
     			
     		case R.id.mi_clear_list:
-    			SherlockDialogFragment dialog = new SherlockDialogFragment(){
+    			DialogFragment dialog = new DialogFragment(){
     				@Override
     				public Dialog onCreateDialog(Bundle savedInstanceState) {
     					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -305,7 +306,7 @@ public class ListItemsFragment extends SherlockListFragment
 		listView.clearChoices();
 		listView.setItemChecked(position, true);
 		if (activeMode == null) {
-			activeMode=getSherlockActivity().startActionMode(actionModeCallback);
+			activeMode= ((AppCompatActivity)getActivity()).startSupportActionMode(actionModeCallback);
 		}
 		return(true);
 	}

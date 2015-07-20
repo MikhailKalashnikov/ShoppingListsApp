@@ -10,8 +10,15 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,14 +29,7 @@ import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
-public class EditItemsFragment extends SherlockFragment 
+public class EditItemsFragment extends Fragment
 		implements AddNewItemDialog.EditItemDialogListener, 
 			OnItemLongClickListener {
 	private final String TAG = getClass().getSimpleName();
@@ -54,7 +54,7 @@ public class EditItemsFragment extends SherlockFragment
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		mShowCategory = prefs.getBoolean(SettingsActivity.KEY_PREF_USE_CATEGORY, true);
 		mModel = DataModel.getInstance(getActivity().getApplicationContext());
-		mDBHelper = ShoppingListDBHelper.getInstance(getSherlockActivity());
+		mDBHelper = ShoppingListDBHelper.getInstance(getActivity());
 	}
 	
 	
@@ -188,7 +188,7 @@ public class EditItemsFragment extends SherlockFragment
 		mListView.clearChoices();
 		mListView.setItemChecked(position, true);
 		if (mActiveMode == null) {
-			mActiveMode= getSherlockActivity().startActionMode(actionModeCallback);
+			mActiveMode= ((AppCompatActivity)getActivity()).startSupportActionMode(actionModeCallback);
 		}
 		return(true);
 	}
@@ -203,7 +203,7 @@ public class EditItemsFragment extends SherlockFragment
 
 	void deleteItem(Item item, ExpandableListPosition expandableListPosition) {
 		if(item.isUsed()){
-			SherlockDialogFragment dialog = new SherlockDialogFragment(){
+			DialogFragment dialog = new DialogFragment(){
 				@Override
 				public Dialog onCreateDialog(Bundle savedInstanceState) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

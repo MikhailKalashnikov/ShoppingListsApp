@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup; 
@@ -22,7 +21,7 @@ import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-public class AddItemToListDialog extends SherlockDialogFragment{
+public class AddItemToListDialog extends DialogFragment {
 	private static final String ATTR_GROUP_NAME = "groupName";
 	private static final String ATTR_ITEM_NAME = "itemName";
 	private List<List<Map<String, Item>>> childData;
@@ -31,7 +30,7 @@ public class AddItemToListDialog extends SherlockDialogFragment{
 	private String[] childFrom;
 	
 	public interface AddItemToListDialogListener{
-		public void onItemAddedToList(Item item);
+		void onItemAddedToList(Item item);
 	}
 	
 	@Override
@@ -171,7 +170,7 @@ public class AddItemToListDialog extends SherlockDialogFragment{
 	}
 	
 	private void showAddNewItemDialog(){
-		SherlockDialogFragment addNewItemDialog = AddNewItemDialog.newInstance();
+		DialogFragment addNewItemDialog = AddNewItemDialog.newInstance();
 		addNewItemDialog.setTargetFragment(getTargetFragment(), 0);
 		addNewItemDialog.show(getActivity().getSupportFragmentManager(), "AddNewItemDialog");
         dismiss();
