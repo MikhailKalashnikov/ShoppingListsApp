@@ -16,6 +16,17 @@ android {
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    productFlavors {
+        mototest {
+            applicationId "mikhail.kalashnikov.shoppinglists.mototest"
+            versionName "mototest"
+        }
+        full {
+            applicationId "mikhail.kalashnikov.shoppinglists"
+        }
+    }
+
 }
 
 dependencies {
