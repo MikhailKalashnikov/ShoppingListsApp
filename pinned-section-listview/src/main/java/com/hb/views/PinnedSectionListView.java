@@ -37,8 +37,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 
-import com.hb.views.pinnedsection.BuildConfig;
-
 /**
  * ListView, which is capable to pin section views at its top while the rest is still scrolled.
  */
@@ -47,7 +45,7 @@ public class PinnedSectionListView extends ListView {
     //-- inner classes
 
 	/** List adapter to be implemented for being used with PinnedSectionListView adapter. */
-	public static interface PinnedSectionListAdapter extends ListAdapter {
+	public interface PinnedSectionListAdapter extends ListAdapter {
 		/** This method shall return 'true' if views of given type has to be pinned. */
 		boolean isItemViewTypePinned(int viewType);
 	}
@@ -124,7 +122,7 @@ public class PinnedSectionListView extends ListView {
                     destroyPinnedShadow();
                 }
             }
-		};
+		}
 
 	};
 
@@ -136,7 +134,7 @@ public class PinnedSectionListView extends ListView {
     			    recreatePinnedShadow();
     			}
     		});
-        };
+        }
         @Override public void onInvalidated() {
         	post(new Runnable() {
     			@Override public void run() { 

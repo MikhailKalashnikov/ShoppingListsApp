@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <CheckBoxPreference 
-        android:key="pref_use_category" 
-        android:title="@string/pref_category"
-        android:defaultValue="true"/>
-    
-    <CheckBoxPreference 
-        android:key="pref_category_main_screen" 
-        android:title="@string/pref_category_main_screen"
-        android:summary="@string/pref_category_main_screen_summary"
-        android:defaultValue="true"
-        android:dependency="pref_use_category"/>
-    
+    <PreferenceCategory
+        android:title="@string/pref_category_title"
+        android:key="pref_key_category_settings">
+
+        <CheckBoxPreference
+            android:key="pref_use_category"
+            android:title="@string/pref_category"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="pref_category_main_screen"
+            android:title="@string/pref_category_main_screen"
+            android:summary="@string/pref_category_main_screen_summary"
+            android:defaultValue="true"
+            android:dependency="pref_use_category"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_recipe_title"
+        android:key="pref_key_recipe_settings">
+
+        <CheckBoxPreference
+            android:key="pref_recipe_use_default"
+            android:title="@string/pref_recipe_use_default"
+            android:summary="@string/pref_recipe_use_default_summary"
+            android:defaultValue="false"/>
+
+        <EditTextPreference
+            android:key="pref_recipe_default_list"
+            android:title="@string/pref_recipe_default_list"
+            android:dependency="pref_recipe_use_default"
+            android:defaultValue="@string/pref_recipe_default_list_value"
+            />
+
+        <CheckBoxPreference
+            android:key="pref_recipe_use_recipe_name_for_list"
+            android:title="@string/pref_recipe_use_recipe_name_for_list"
+            android:dependency="pref_recipe_use_default"
+            android:defaultValue="false"/>
+
+        <EditTextPreference
+            android:key="pref_recipe_default_category"
+            android:title="@string/pref_recipe_default_category"
+            android:dependency="pref_recipe_use_default"
+            android:defaultValue="@string/pref_recipe_default_category_value"
+            />
+    </PreferenceCategory>
 </PreferenceScreen>

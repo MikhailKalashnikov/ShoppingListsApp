@@ -26,10 +26,10 @@ public class ModelFragment extends Fragment implements ShoppingDataListener {
 		uploadData();
 	}
 	
-	synchronized public void uploadData(){
+	synchronized private void uploadData(){
 		if(LogGuard.isDebug) Log.d(TAG, "uploadData = " + model.isDataUploaded());
 		if (model.isDataUploaded()){
-			((ShoppingListsActivity)getActivity()).showListItems(model.getShoppingList());
+			((ShoppingListModelCallbacks)getActivity()).onUploadData(model.getShoppingList());
 		}else {
 			model.uploadData(this);
 		}
@@ -38,7 +38,8 @@ public class ModelFragment extends Fragment implements ShoppingDataListener {
 	
 	@Override
 	public void updateShoppingData(List<ShoppingList> shoppingLists,
-			List<ListItem> listItems, Map<Long, Item> itemsMap) {
+			List<ListItem> listItems, Map<Long, Item> itemsMap,
+                                   Map<Recipe,List<RecipeItem>> recipeItemsMap) {
 		if(LogGuard.isDebug) Log.d(TAG, "updateShoppingData");
 		uploadData();
 	}
@@ -56,6 +57,16 @@ public class ModelFragment extends Fragment implements ShoppingDataListener {
 	
 	public DataModel getModel(){
 		return model;
+	}
+
+	/**
+	 * Callbacks interface
+	 */
+	public interface ShoppingListModelCallbacks {
+		/**
+		 * Called when data uploaded
+		 */
+		void onUploadData(List<ShoppingList> shoppingLists);
 	}
 }
 	

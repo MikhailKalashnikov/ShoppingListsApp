@@ -29,6 +29,7 @@
         android:layout_marginRight="@dimen/view_horizontal_margin"
         android:layout_marginBottom="@dimen/view_vertical_margin"
         android:hint="@string/item_category"
+        android:completionThreshold="1"
         android:textColor="#000000"
         />
     

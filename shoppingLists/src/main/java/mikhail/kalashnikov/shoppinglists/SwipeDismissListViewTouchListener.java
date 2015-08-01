@@ -199,7 +199,8 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                 if (mDownView != null) {
                     mDownX = motionEvent.getRawX();
                     mDownPosition = mListView.getPositionForView(mDownView);
-                    if(((ListItem)mListView.getAdapter().getItem(mDownPosition)).getId()<0){
+                    if((mListView.getAdapter().getItem(mDownPosition) instanceof ListView) &&
+                            ((ListItem) mListView.getAdapter().getItem(mDownPosition)).getId()<0 ){
             			return true;
             		}
 

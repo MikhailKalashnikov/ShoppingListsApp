@@ -24,26 +24,24 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class AddNewItemDialog extends DialogFragment implements OnEditorActionListener{
-	public static final String KEY_MODE = "mode";
-	public static final String KEY_ITEM_ID = "item_id";
-	public static final String KEY_LIST_ITEM_ID = "list_item_id";
-	public static final String KEY_LIST_ID = "list_id";
-	public static final String KEY_QTY = "qty";
-	public static final String KEY_QTY_TYPE = "qty_type";
-	public static final String KEY_ITEM_NAME = "item_name";
-	public static final String KEY_ITEM_CATEGORY = "item_category";
-	public static final int MODE_ADD_NEW_ITEM = 0;
-	public static final int MODE_EDIT_ITEM = 1;
-	public static final int MODE_EDIT_LIST_ITEM = 2;
+	private static final String KEY_MODE = "mode";
+	private static final String KEY_ITEM_ID = "item_id";
+	private static final String KEY_LIST_ITEM_ID = "list_item_id";
+	private static final String KEY_LIST_ID = "list_id";
+	private static final String KEY_QTY = "qty";
+	private static final String KEY_QTY_TYPE = "qty_type";
+	private static final String KEY_ITEM_NAME = "item_name";
+	private static final String KEY_ITEM_CATEGORY = "item_category";
+	private static final int MODE_ADD_NEW_ITEM = 0;
+	private static final int MODE_EDIT_ITEM = 1;
+	private static final int MODE_EDIT_LIST_ITEM = 2;
 	
 	private Spinner mQty_types_spinner;
 	private TextView mItemNameTextView;
 	private AutoCompleteTextView mItemCategoryTextView;
 	private TextView mItemQtyTextView;
-	private List<String> mQtyTypeList ;
 	private int mMode = MODE_ADD_NEW_ITEM;
-	private boolean mShowCategory = false;
-	
+
 	public static AddNewItemDialog newInstance(){
 		AddNewItemDialog d = new AddNewItemDialog();
 		Bundle args = new Bundle();
@@ -81,23 +79,23 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 	}
 	
 	public interface AddNewItemDialogListener{
-		public void onItemAdded(String name, String qty_type, String category);
+		void onItemAdded(String name, String qty_type, String category);
 	}
 	
 	public interface EditItemDialogListener{
-		public void onItemEdited(String name, String qty_type, String category, long item_id);
+		void onItemEdited(String name, String qty_type, String category, long item_id);
 	}
 	
 	public interface EditListItemDialogListener{
-		public void onListItemEdited(String qty, long listItem_id, long list_id, int isDone);
-		public void onListItemWithItemEdited(String qty, long listItem_id, long list_id, int isDone, 
+		void onListItemEdited(String qty, long listItem_id, long list_id, int isDone);
+		void onListItemWithItemEdited(String qty, long listItem_id, long list_id, int isDone,
 				String name, String qty_type, String category, long item_id);
 	}
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		mShowCategory = prefs.getBoolean(SettingsActivity.KEY_PREF_USE_CATEGORY, true);
+		boolean showCategory = prefs.getBoolean(SettingsActivity.KEY_PREF_USE_CATEGORY, true);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		mMode = getArguments().getInt(KEY_MODE);
@@ -108,16 +106,16 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 		mItemNameTextView.setOnEditorActionListener(this);
 		mItemQtyTextView = (TextView) view.findViewById(R.id.new_item_qty);
 		mQty_types_spinner = (Spinner) view.findViewById(R.id.new_item_qty_type);
-		mQtyTypeList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.qty_types)));
+		List<String> qtyTypeList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.qty_types)));
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
-					android.R.layout.simple_spinner_item, mQtyTypeList);
+					android.R.layout.simple_spinner_item, qtyTypeList);
 		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mQty_types_spinner.setAdapter(adapter);
 		
 		mItemCategoryTextView = (AutoCompleteTextView) view.findViewById(R.id.item_category);
-		if(mShowCategory){
+		if(showCategory){
 			ShoppingListDBHelper dbHelper = ShoppingListDBHelper.getInstance(getActivity().getApplicationContext());
-			List<String> category_list = dbHelper.getCategory();
+			List<String> category_list = dbHelper.getCategoryList();
 			ArrayAdapter<String> category_adapter = new ArrayAdapter<String>(getActivity(), 
 					android.R.layout.simple_list_item_1, category_list);
 			mItemCategoryTextView.setAdapter(category_adapter);
@@ -131,18 +129,18 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 			case MODE_EDIT_ITEM:
 				mItemQtyTextView.setVisibility(View.GONE);
 				mItemNameTextView.setText(getArguments().getString(KEY_ITEM_NAME));
-				mQty_types_spinner.setSelection(mQtyTypeList.indexOf(getArguments().getString(KEY_QTY_TYPE)));
+				mQty_types_spinner.setSelection(qtyTypeList.indexOf(getArguments().getString(KEY_QTY_TYPE)));
 				mItemCategoryTextView.setText(getArguments().getString(KEY_ITEM_CATEGORY));
 				break;
 			case MODE_EDIT_LIST_ITEM:
 				mItemQtyTextView.setVisibility(View.VISIBLE);
 				mItemQtyTextView.setText(getArguments().getString(KEY_QTY));
 				mItemNameTextView.setText(getArguments().getString(KEY_ITEM_NAME));
-				mQty_types_spinner.setSelection(mQtyTypeList.indexOf(getArguments().getString(KEY_QTY_TYPE)));
+				mQty_types_spinner.setSelection(qtyTypeList.indexOf(getArguments().getString(KEY_QTY_TYPE)));
 				mItemCategoryTextView.setText(getArguments().getString(KEY_ITEM_CATEGORY));
 				break;
 		}
-		mItemCategoryTextView.setVisibility(mShowCategory? View.VISIBLE: View.GONE);
+		mItemCategoryTextView.setVisibility(showCategory? View.VISIBLE: View.GONE);
 		
 		builder
 			.setTitle(mMode==MODE_EDIT_ITEM?R.string.edit_item_title:

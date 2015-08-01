@@ -10,7 +10,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/messageBarLib" />
             <option value="$PROJECT_DIR$/pinned-section-listview" />
             <option value="$PROJECT_DIR$/shoppingLists" />
           </set>

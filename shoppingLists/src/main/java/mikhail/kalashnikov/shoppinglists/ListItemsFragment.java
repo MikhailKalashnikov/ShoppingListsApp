@@ -3,9 +3,6 @@ package mikhail.kalashnikov.shoppinglists;
 import java.util.Comparator;
 import java.util.List;
 
-import net.simonvt.messagebar.MessageBar;
-import net.simonvt.messagebar.MessageBar.OnMessageClickListener;
-
 import com.hb.views.PinnedSectionListView.PinnedSectionListAdapter;
 
 import android.app.AlertDialog;
@@ -16,8 +13,9 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -38,20 +36,19 @@ import android.widget.TextView;
 public class ListItemsFragment extends ListFragment
 		implements AddItemToListDialog.AddItemToListDialogListener, AddNewItemDialog.AddNewItemDialogListener, 
 			AddNewItemDialog.EditListItemDialogListener,
-			OnItemLongClickListener, OnSharedPreferenceChangeListener {
+			OnItemLongClickListener, OnSharedPreferenceChangeListener, View.OnClickListener {
 	private final String TAG = getClass().getSimpleName();
 	private ArrayAdapter<ListItem> mAdapter;
 	private DataModel dataModel;
 	private ActionMode activeMode = null;
 	private ListView listView=null;
-	private MessageBar mMessageBar;
-	private String mStrDeleted;
-	private String mStrUndo;
+	private Snackbar mMessageBar;
+    private View coordinatorLayout;
 	private static final int[] COLORS = new int[] {
-		R.color.green_light, R.color.green_light, R.color.orange_light,
-        R.color.red_light, R.color.papaya_whip, R.color.sky_blue, R.color.light_golden, 
-        R.color.green_light2, R.color.rosy_brown, R.color.pale_turquoise,
-        R.color.grey_light,R.color.orange};
+			R.color.green_light2, R.color.blue_light, R.color.green_light, R.color.purple,
+			R.color.red_light, R.color.papaya_whip, R.color.sky_blue, R.color.light_golden,
+         R.color.rosy_brown, R.color.pale_turquoise,
+        R.color.grey_light,R.color.teal_light};
 	
 	
     public static ListItemsFragment newInstance(long listId) {
@@ -69,6 +66,9 @@ public class ListItemsFragment extends ListFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
     	View view = inflater.inflate(R.layout.list_items, container, false);
+        coordinatorLayout = view.findViewById(R.id.coordinatorLayout);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(this);
     	return view;
     }
     
@@ -77,31 +77,30 @@ public class ListItemsFragment extends ListFragment
 		Log.d(TAG, "onActivityCreated");
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
-		
-        mStrDeleted = getActivity().getString(R.string.msg_list_item_deleted);
-        mStrUndo = getActivity().getString(R.string.msg_btn_undo);
+
+		String strDeleted = getActivity().getString(R.string.msg_list_item_deleted);
+		String strUndo = getActivity().getString(R.string.msg_btn_undo);
         
 		dataModel = DataModel.getInstance(getActivity().getApplicationContext());
 		
 		Log.d(TAG, "getShownListId()=" + getShownListId()  + ", dataModel.isDataUploaded()=" + dataModel.isDataUploaded());
 		if(dataModel.isDataUploaded()){
 			mAdapter = new ShoppingListAdapter(dataModel.getListItems(getShownListId()));
-			
-			
+
 			setListAdapter(mAdapter);
 			listView = getListView();
 			listView.setLongClickable(true);
 			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 			listView.setOnItemLongClickListener(this);
 			
-	        mMessageBar = new MessageBar(getActivity());
-	        mMessageBar.setOnClickListener(new OnMessageClickListener() {
-				@Override
-				public void onMessageClick(Parcelable token) {
-					((ShoppingListAdapter) mAdapter).undoRemove();
-					mMessageBar.clear();
-				}
-			});
+	        mMessageBar = Snackbar.make(coordinatorLayout, strDeleted, Snackbar.LENGTH_SHORT)
+                    .setAction(strUndo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((ShoppingListAdapter) mAdapter).undoRemove();
+                            //mMessageBar.dismiss();
+                        }
+                    });
 	        
 			SwipeDismissListViewTouchListener touchListener =
 	            new SwipeDismissListViewTouchListener(
@@ -113,7 +112,7 @@ public class ListItemsFragment extends ListFragment
 	                                mAdapter.remove(mAdapter.getItem(position));
 	                            }
 	                           // mAdapter.notifyDataSetChanged();
-	                            mMessageBar.show(mStrDeleted, mStrUndo, R.drawable.ic_messagebar_undo);
+	                            mMessageBar.show();
 	                            
 	                        }
 	                    });
@@ -130,12 +129,6 @@ public class ListItemsFragment extends ListFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()){
-    		case R.id.mi_add_item_to_list:
-    			DialogFragment addItemToListDialog = new AddItemToListDialog();
-    			addItemToListDialog.setTargetFragment(this, 0);
-    			addItemToListDialog.show(getActivity().getSupportFragmentManager(), "AddListItemDialog");
-    			return true;
-    			
     		case R.id.mi_clear_list:
     			DialogFragment dialog = new DialogFragment(){
     				@Override
@@ -168,17 +161,27 @@ public class ListItemsFragment extends ListFragment
     	if(dataModel.isDataUploaded()){
     		mAdapter.notifyDataSetChanged();
     	}
-    }
 
-    public long getShownListId() {
+	}
+
+	private long getShownListId() {
         return getArguments().getLong("listId", -1);
     }
 	
 	private ListItem getModel(int position) {
 		return(((ShoppingListAdapter)getListAdapter()).getItem(position));
 	}
-	  
-	class ShoppingListAdapter extends ArrayAdapter<ListItem>  
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fab) {
+            DialogFragment addItemToListDialog = new AddItemToListDialog();
+            addItemToListDialog.setTargetFragment(this, 0);
+            addItemToListDialog.show(getActivity().getSupportFragmentManager(), "AddListItemDialog");
+        }
+    }
+
+    class ShoppingListAdapter extends ArrayAdapter<ListItem>
 		implements PinnedSectionListAdapter {
 		ListItem removedListItem= null;
         
@@ -310,15 +313,15 @@ public class ListItemsFragment extends ListFragment
 		}
 		return(true);
 	}
-	
-	void editListItem(int position) {
+
+	private void editListItem(int position) {
 		AddNewItemDialog dialog = AddNewItemDialog.newInstance(mAdapter.getItem(position));
 		dialog.setTargetFragment(this, 0);
 		dialog.show(getActivity().getSupportFragmentManager(), "EditListItemDialog");
 		
 	}
 
-	void deleteItemFromList(int position) {
+	private void deleteItemFromList(int position) {
 		dataModel.deleteListItemAsync(mAdapter.getItem(position).getId(), getShownListId());
 		mAdapter.notifyDataSetChanged();
 		
@@ -391,5 +394,6 @@ public class ListItemsFragment extends ListFragment
 		}
 		
 	}
+
 
 }

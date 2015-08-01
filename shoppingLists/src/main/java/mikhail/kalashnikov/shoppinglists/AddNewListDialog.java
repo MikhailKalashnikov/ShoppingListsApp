@@ -17,8 +17,8 @@ public class AddNewListDialog extends DialogFragment {
 	private AddNewListDialogListener listener;
 	
 	public interface AddNewListDialogListener{
-		public void onListAdded(String name);
-		public void onListEdited(String name,long id);
+		void onListAdded(String name);
+		void onListEdited(String name,long id);
 	}
 	
 	static AddNewListDialog newInstance(String name, long id){

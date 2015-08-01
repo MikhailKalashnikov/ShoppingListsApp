@@ -12,35 +12,85 @@
     <string name="list_item_qty">Кол-во</string>
     <string name="mi_add_item">Добавить покупку</string>
     <string name="mi_add_list">Новый лист</string>
+    <string name="mi_add_recipe">Добавить рецепт</string>
     <string name="mi_delete_list">Удалить список</string>
     <string name="mi_clear_list">Очистить список</string>
     <string name="mi_edit_list">Изменить список</string>
     <string name="mi_edit_items">Редактировать покупки</string>
-    <string name="item_is_used">Эта покупка используется в списке!</string>
+    <string name="mi_recipe_list">Рецепты</string>
     <string name="delete_list_confirmation">Удалить список вместе со всеми покупками?</string>
+    <string name="item_is_used">Эта покупка используется в списке!</string>
     <string name="clear_list_confirmation">Удалить все покупки из скписка?</string>
     <string name="add_new_item">Новая&#8230;</string>
+    <string name="add_new_recipe">Новый рецепт&#8230;</string>
     <string name="add_new_item_title">Добавить покупку</string>
     <string name="add_new_list_title">Созадть новый список</string>
     <string name="edit_list_title">Изменить название списка</string>
     <string name="edit_list_item_title">Редактировать покупку</string>
     <string name="edit_item_title">Изменить покупку</string>
-	<string name="on_upgrade_error">This should not be called</string>
-	<string name="listitem_context_title">Редактировать покупку</string>
-	<string name="done">Done</string>
-	<string name="empty_category">[Без Категории]</string>
-	<string-array name="qty_types">
-		<item >Штука</item>
-		<item >Кг</item>
-		<item >Литр</item>
-		<item >Упаковка</item>
-	</string-array>
-	<color name="doneTextViewColor">#B5B5B5</color>
-	
-	<string name="pref_category">Категории покупок</string>
-	<string name="pref_category_main_screen">Категории на главной странице</string>
-	<string name="pref_category_main_screen_summary">Показывать категории на главной странице</string>
-	<string name="mi_settings">Настройки</string>
-	<string name="msg_list_item_deleted">Удалено</string>
-	<string name="msg_btn_undo">Отменить</string>
+    <string name="listitem_context_title">Редактировать покупку</string>
+    <string name="list_context">Редактировать список</string>
+
+    <string name="done">Done</string>
+    <string name="empty_category">[Без Категории]</string>
+    <string-array name="qty_types">
+        <item >Штука</item>
+        <item >Кг</item>
+        <item >Литр</item>
+        <item >Упаковка</item>
+    </string-array>
+    <color name="doneTextViewColor">#B5B5B5</color>
+
+    <string name="mi_settings">Настройки</string>
+    <string name="msg_list_item_deleted">Удалено</string>
+    <string name="msg_btn_undo">Отменить</string>
+
+    <string name="pref_category">Категории покупок</string>
+    <string name="pref_category_main_screen">Категории на главной странице</string>
+    <string name="pref_category_main_screen_summary">Показывать категории на главной странице</string>
+    <string name="pref_category_title">Категории</string>
+    <string name="pref_recipe_title">Рецепты</string>
+    <string name="pref_recipe_use_default">Значение по умолчанию</string>
+    <string name="pref_recipe_use_default_summary">Использовать список и категорию по умолчанию</string>
+    <string name="pref_recipe_default_list">Список по умолчанию</string>
+    <string name="pref_recipe_default_category">Категория по умолчанию</string>
+    <string name="pref_recipe_use_recipe_name_for_list">Названия рецепта для списка</string>
+    <string name="pref_recipe_default_list_value">Рецепты</string>
+    <string name="pref_recipe_default_category_value">Рецепты</string>
+
+    <string name="navigation_drawer_open">Открыть боковую панель</string>
+    <string name="navigation_drawer_close">Закрыть боковую панель</string>
+    <string name="title_activity_add_recipe">Добавить рецепт</string>
+    <string name="btn_get_url">OK</string>
+    <string name="hint_url">URL Рецепта</string>
+    <string name="btn_add_recipe">Добавить рецепт</string>
+
+    <string name="parse_recipe_not_valid_url">Введите корректный web адрес</string>
+    <string name="parse_recipe_items_not_found">Ингредиенты не найдены</string>
+    <string name="parse_recipe_unsupported_url">Этот web сайт не поддерживается</string>
+    <string name="parse_recipe_error">Ошибка при открытии рецепта</string>
+    <string name="list_for_recipe">Список</string>
+    <string name="category_for_recipe">Категория</string>
+    <string name="cbx_add_recipe_save_as_default">Использовать по умолчанию</string>
+    <string name="cbx_use_recipe_name">Название рецепта</string>
+    <string name="add_recipe_to_list">Добавить рецепт в список</string>
+    <string name="pick_a_list">Выберите список</string>
+    <string name="pick_a_recipe">Выберите рецепт</string>
+    <string name="add_recipe_to_list_new_name">Новый</string>
+    <string name="pick_a_category">Выберите категорию</string>
+    <string name="intent_add_recipe">Добавить рецепт в Список Покупок</string>
+    <string name="about_title">О Приложении</string>
+    <string name="about_text">Поддерживаемые Web сайты c рецептами \n
+	\t	- jamieoliver.com \n
+	\t	- allrecipes.com \n
+	\t	- recipe.com \n
+	\t	- food.com \n
+	\t	- gotovim.ru \n
+	\t	- gotovim-doma.ru \n
+	\t	- eda.ru \n
+	\t	- andychef.ru \n
+\n
+	Напишите мне, если Вы хотите, чтобы был поддержан другой сайт.</string>
+    <string name="send_email">Написать письмо</string>
+
 </resources>

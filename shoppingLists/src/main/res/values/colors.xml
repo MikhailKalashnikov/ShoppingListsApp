@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="red_light">#ffff4444</color>
-    <color name="green_light">#ff99cc00</color>
-    <color name="orange_light">#ffffbb33</color>
-    <color name="orange">#ffffa500</color>
+    <color name="red_light">#ffff5252</color>
+    <color name="green_light">#ff00e676</color>
+    <color name="purple">#ff7c4dff</color>
+    <color name="teal_light">#ff1de9b6</color>
     <color name="blue_light">#ff33b5e5</color>
     <color name="blue">#ff0000ff</color>
     <color name="grey_light">#ffD1D0CE</color>
@@ -14,5 +14,9 @@
     <color name="papaya_whip">#ffffefd5</color>
     <color name="light_golden">#ffffec8b</color>
     <color name="sky_blue">#ff87ceff</color>
-    
+
+
+    <color name="primary">#ff607d8b</color>
+    <color name="primary_dark">#ff455a64</color>
+    <color name="accent">#ffffab40</color>
 </resources>

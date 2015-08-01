@@ -14,7 +14,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +31,6 @@ import android.widget.TextView;
 public class EditItemsFragment extends Fragment
 		implements AddNewItemDialog.EditItemDialogListener, 
 			OnItemLongClickListener {
-	private final String TAG = getClass().getSimpleName();
 	private ArrayAdapter<Item> mAdapter;
 	private SimpleExpandableListAdapter mExpandableListAdapter;
 	private ShoppingListDBHelper mDBHelper;
@@ -50,7 +48,6 @@ public class EditItemsFragment extends Fragment
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "onCreate");
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		mShowCategory = prefs.getBoolean(SettingsActivity.KEY_PREF_USE_CATEGORY, true);
 		mModel = DataModel.getInstance(getActivity().getApplicationContext());
@@ -192,16 +189,15 @@ public class EditItemsFragment extends Fragment
 		}
 		return(true);
 	}
-	
-	void editItem(Item item) {
-		Log.d(TAG, item.toStringFull());
+
+	private void editItem(Item item) {
 		AddNewItemDialog dialog = AddNewItemDialog.newInstance(item);
 		dialog.setTargetFragment(this, 0);
 		dialog.show(getActivity().getSupportFragmentManager(), "EditItemDialog");
 	}
 
 
-	void deleteItem(Item item, ExpandableListPosition expandableListPosition) {
+	private void deleteItem(Item item, ExpandableListPosition expandableListPosition) {
 		if(item.isUsed()){
 			DialogFragment dialog = new DialogFragment(){
 				@Override

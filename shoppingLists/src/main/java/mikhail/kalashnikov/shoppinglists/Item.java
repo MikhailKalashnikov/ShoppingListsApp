@@ -7,10 +7,6 @@ public class Item implements BaseColumns, Comparable<Item>{
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_QTY_TYPE = "qty_type";
     public static final String COLUMN_CATEGORY = "category";
-    public static final int QTY_TYPE_PIECE = 0;
-    public static final int QTY_TYPE_KG = 1;
-    public static final int QTY_TYPE_LT = 2;
-    public static final int QTY_TYPE_PACK = 3;
     
     private long id;
     private String name;

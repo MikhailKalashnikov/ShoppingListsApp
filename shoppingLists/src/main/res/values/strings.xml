@@ -12,35 +12,87 @@
     <string name="list_item_qty">Qty</string>
     <string name="mi_add_item">Add Item to List</string>
     <string name="mi_add_list">New List</string>
+    <string name="mi_add_recipe">Add Recipe</string>
     <string name="mi_delete_list">Delete List</string>
     <string name="mi_clear_list">Clear List</string>
     <string name="mi_edit_list">Change List Name</string>
     <string name="mi_edit_items">Edit Items</string>
-    <string name="item_is_used">This item is used in the lists!</string>
+    <string name="mi_recipe_list">Recipes</string>
     <string name="delete_list_confirmation">Delete list with all its items?</string>
+    <string name="item_is_used">This item is used in the lists!</string>
     <string name="clear_list_confirmation">Delete all items from the list?</string>
     <string name="add_new_item">Add New Item&#8230;</string>
+    <string name="add_new_recipe">Add New Recipe&#8230;</string>
     <string name="add_new_item_title">Add New Item</string>
     <string name="add_new_list_title">Add New List</string>
     <string name="edit_list_title">Edit List</string>
     <string name="edit_list_item_title">Edit List Item</string>
     <string name="edit_item_title">Edit Item</string>
-	<string name="on_upgrade_error">This should not be called</string>
-	<string name="listitem_context_title">Modify List Item</string>
-	<string name="done">Done</string>
-	<string name="empty_category">[No Category]</string>
-	<string-array name="qty_types">
-		<item >Piece</item>
-		<item >Kg</item>
-		<item >Liter</item>
-		<item >Pack</item>
-	</string-array>
-	<color name="doneTextViewColor">#B5B5B5</color>
-	
-	<string name="pref_category">Item Category</string>
-	<string name="pref_category_main_screen">Category on main screen</string>
-	<string name="pref_category_main_screen_summary">Show category on main screen</string>
-	<string name="mi_settings">Settings</string>
-	<string name="msg_list_item_deleted">Deleted</string>
-	<string name="msg_btn_undo">Undo</string>
+    <string name="listitem_context_title">Modify List Item</string>
+    <string name="list_context">Modify List</string>
+
+    <string name="done">Done</string>
+    <string name="empty_category">[No Category]</string>
+    <string-array name="qty_types">
+        <item >Piece</item>
+        <item >Kg</item>
+        <item >Liter</item>
+        <item >Pack</item>
+    </string-array>
+    <color name="doneTextViewColor">#B5B5B5</color>
+
+    <string name="mi_settings">Settings</string>
+    <string name="msg_list_item_deleted">Deleted</string>
+    <string name="msg_btn_undo">Undo</string>
+
+    <string name="pref_category">Use item Category</string>
+    <string name="pref_category_main_screen">Category on main screen</string>
+    <string name="pref_category_main_screen_summary">Show category on main screen</string>
+    <string name="pref_category_title">Category</string>
+    <string name="pref_recipe_title">Recipe</string>
+    <string name="pref_recipe_use_default">Use default</string>
+    <string name="pref_recipe_use_default_summary">Use default list and category for recipes</string>
+    <string name="pref_recipe_default_list">Default List</string>
+    <string name="pref_recipe_default_category">Default Category</string>
+    <string name="pref_recipe_use_recipe_name_for_list">Recipe name for list name</string>
+    <string name="pref_recipe_default_list_value">Recipes</string>
+    <string name="pref_recipe_default_category_value">Recipes</string>
+
+
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_add_recipe">Add Recipe</string>
+    <string name="btn_get_url">OK</string>
+    <string name="hint_url">Add Recipe URL</string>
+    <string name="btn_add_recipe">Add Recipe</string>
+
+    <string name="parse_recipe_not_valid_url">Enter valid URL</string>
+    <string name="parse_recipe_items_not_found">No ingredients found</string>
+    <string name="parse_recipe_unsupported_url">Unsupported Web site</string>
+    <string name="parse_recipe_error">Can&quot;t parse this recipe</string>
+    <string name="list_for_recipe">List</string>
+    <string name="category_for_recipe">Category</string>
+    <string name="cbx_add_recipe_save_as_default">Use as default</string>
+    <string name="cbx_use_recipe_name">Recipe name</string>
+    <string name="add_recipe_to_list">Add recipe to list</string>
+    <string name="pick_a_list">Pick a list</string>
+    <string name="pick_a_recipe">Pick a recipe</string>
+    <string name="add_recipe_to_list_new_name">New</string>
+    <string name="pick_a_category">Pick a category</string>
+    <string name="intent_add_recipe">Add Recipe to ShoppingList</string>
+    <string name="about_title">About</string>
+    <string name="about_text">Supported web sites with recipes \n
+	\t	- jamieoliver.com \n
+	\t	- allrecipes.com \n
+	\t	- recipe.com \n
+	\t	- food.com \n
+	\t	- gotovim.ru \n
+	\t	- gotovim-doma.ru \n
+	\t	- eda.ru \n
+	\t	- andychef.ru \n
+\n
+	Send me email if you need to support another site.</string>
+    <string name="send_email">Send email</string>
 </resources>

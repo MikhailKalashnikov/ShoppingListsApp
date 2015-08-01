@@ -8,35 +8,58 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:uiOptions="splitActionBarWhenNarrow">
+        android:uiOptions="splitActionBarWhenNarrow" >
         <activity
-            android:name="mikhail.kalashnikov.shoppinglists.ShoppingListsActivity"
-            android:label="@string/app_name">
+            android:name=".EditItemFragmentActivity"
+            android:label="@string/mi_edit_items"
+            android:parentActivityName=".ShoppingListsActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mikhail.kalashnikov.shoppinglists.ShoppingListsActivity" />
+        	>
+        </activity>
+        <activity
+            android:name=".RecipeListFragmentActivity"
+            android:label="@string/mi_recipe_list"
+            android:parentActivityName=".ShoppingListsActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mikhail.kalashnikov.shoppinglists.ShoppingListsActivity" />
+            >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/mi_settings" />
+        <activity
+            android:name=".ShoppingListsActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name="EditItemFragmentActivity"
-            android:label="@string/mi_edit_items"
-            android:parentActivityName="mikhail.kalashnikov.shoppinglists.ShoppingListsActivity" >
-        	<!-- Parent activity meta-data to support API level 7+ -->
-        	<meta-data
-            	android:name="android.support.PARENT_ACTIVITY"
-            	android:value="mikhail.kalashnikov.shoppinglists.ShoppingListsActivity" />
-        	>
-            
-		</activity>
-		<activity 
-		    android:name="SettingsActivity"
-		    android:label="@string/mi_settings"
-		    ></activity>
+        <activity
+            android:name=".AddRecipe"
+            android:label="@string/title_activity_add_recipe"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter
+                android:label="@string/intent_add_recipe">
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

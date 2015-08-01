@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import mikhail.kalashnikov.shoppinglists.ShoppingListDBHelper.ShoppingDataListener;
+import mikhail.kalashnikov.shoppinglists.recipeparser.Ingredient;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,18 +17,20 @@ import android.util.Log;
 
 public class DataModel implements ShoppingDataListener {
 	private final String TAG = getClass().getSimpleName();
-	private List<ShoppingList> shoppingLists = new ArrayList<ShoppingList>();
-	private Map<Long, Item> itemsMap = new HashMap<Long, Item>();
-	private Map<Long, List<ListItem>> listItemsMap = new HashMap<Long, List<ListItem>>();
+    private final static long NOT_FOUND = -999;
+	private List<ShoppingList> shoppingLists = new ArrayList<>();
+	private Map<Long, Item> itemsMap = new HashMap<>();
+	private Map<Long, List<ListItem>> listItemsMap = new HashMap<>();
 	//private Map<Long, List<ListItem>> listItemsMapWithCategory = new HashMap<Long, List<ListItem>>();
-	private Map<Long, Map<String, List<ListItem>>> mapItemsMapWithCategory = new HashMap<Long, Map<String, List<ListItem>>>();
+	private Map<Long, Map<String, List<ListItem>>> mapItemsMapWithCategory = new HashMap<>();
 	private boolean mIsDataUploaded = false;
 	private ShoppingListDBHelper  dbHelper;
 	private static DataModel singleton =null;
 	private ShoppingDataListener mListener;
 	private boolean mShowCategoryOnMainScreen = true;
-	
-	public synchronized static final DataModel getInstance(Context context){
+    private Map<Recipe,List<RecipeItem>> mRecipeItemMap;
+
+    public synchronized static DataModel getInstance(Context context){
 		Log.d("DataModel", "getInstance");
 		if(singleton==null){
 			singleton = new DataModel(context);
@@ -52,7 +55,8 @@ public class DataModel implements ShoppingDataListener {
 	
 	@Override
 	public void updateShoppingData(List<ShoppingList> shoppingLists,
-			List<ListItem> listItems, Map<Long, Item> itemsMap) {
+								   List<ListItem> listItems, Map<Long, Item> itemsMap,
+                                   Map<Recipe,List<RecipeItem>> recipeItemsMap) {
 		if(LogGuard.isDebug) Log.d(TAG, "updateShoppingData");
 		this.shoppingLists=shoppingLists;
 		
@@ -83,8 +87,12 @@ public class DataModel implements ShoppingDataListener {
 				rebuildListWithCategory(listId);
 			}
 		}
+
+
+        mRecipeItemMap = recipeItemsMap;
+
 		mIsDataUploaded = true;
-		mListener.updateShoppingData(shoppingLists, listItems, itemsMap);
+		mListener.updateShoppingData(shoppingLists, listItems, itemsMap, recipeItemsMap);
 	}
 	
 	private void rebuildListWithCategory(long listId){
@@ -147,14 +155,22 @@ public class DataModel implements ShoppingDataListener {
 	List<Item> getItems() {
 		return dbHelper.getItems();
 	}
-	List<String> getCategory() {
-		return dbHelper.getCategory();
+	List<String> getCategoryList() {
+		return dbHelper.getCategoryList();
 	}
-	
+
 	Map<String, List<Item>> getCategoryItemMap(){
 		return dbHelper.getCategoryItemMap();
 	}
-	
+
+	Map<Recipe, List<RecipeItem>> getRecipeItemMap(){
+		return mRecipeItemMap;
+	}
+
+	List<Recipe> getRecipeList(){
+		return new ArrayList<>(mRecipeItemMap.keySet());
+	}
+
 	public boolean isDataUploaded(){
 		return mIsDataUploaded;
 	}
@@ -243,7 +259,7 @@ public class DataModel implements ShoppingDataListener {
 			if(!itemExists){
 				item.setId(newRowId);
 				itemsMap.put(newRowId, item);
-				dbHelper.addItemToList(item);
+				dbHelper.addItemToIntList(item);
 			}else{
 				listItem.setItem(item);
 			}
@@ -254,9 +270,9 @@ public class DataModel implements ShoppingDataListener {
 		
 	}
 	
-	void insertItemAsync(String name, String qty_type, String category) {
-		dbHelper.insertItemAsync(name, qty_type, category);
-	}
+//	void insertItemAsync(String name, String qty_type, String category) {
+//		dbHelper.insertItemAsync(name, qty_type, category);
+//	}
 	
 	long insertShoppingListAsync(String name) {
 		long id = dbHelper.getNextShoppingListId();
@@ -454,6 +470,7 @@ public class DataModel implements ShoppingDataListener {
 		
 		DeleteAllListItemFromListTask(long list_id, boolean onlyDone){
 			this.list_id=list_id;
+            this.onlyDone = onlyDone;
 		}
 		
 		@Override
@@ -555,6 +572,236 @@ public class DataModel implements ShoppingDataListener {
 		
 	}
 
+    void insertRecipeAsync(String recipeName, String listName, String categoryName, List<Ingredient> listIngredients) {
+        if(LogGuard.isDebug) Log.d(TAG, "insertRecipeAsync: "+listName + ", " + categoryName
+                + ", " + recipeName + ", " + listIngredients.size());
+
+        //insert list
+        long list_id = findListByName(listName);
+        if (list_id == NOT_FOUND) {
+            list_id = dbHelper.getNextShoppingListId();
+            ShoppingList list = new ShoppingList(listName, list_id);
+            shoppingLists.add(list);
+
+            if(mShowCategoryOnMainScreen){
+                mapItemsMapWithCategory.put(list.getId(), new HashMap<String, List<ListItem>>());
+                listItemsMap.put(list.getId(), new ArrayList<ListItem>());
+            }else{
+                listItemsMap.put(list.getId(), new ArrayList<ListItem>());
+            }
+
+            ModelFragment.executeAsyncTask(new InsertShoppingListTask(list));
+
+        }
+
+        //insert Items, listItems, Recipe and recipeItems
+        List<Item> iList = new ArrayList<>();
+        List<ListItem> liList = new ArrayList<>();
+        List<RecipeItem> riList = new ArrayList<>();
+        Recipe recipe = new Recipe(recipeName);
+        mRecipeItemMap.put(recipe, new ArrayList<RecipeItem>());
+        for (Ingredient ing : listIngredients) {
+            Item item = new Item(ing.getName(), ing.getQty_type().toString(), categoryName);
+            iList.add(item);
+
+            ListItem listItem = new ListItem(list_id, item, ing.getQty());
+            liList.add(listItem);
+
+            if(mShowCategoryOnMainScreen){
+                if(!mapItemsMapWithCategory.get(list_id).containsKey(listItem.getItem().getCategory())){
+                    mapItemsMapWithCategory.get(list_id).put(listItem.getItem().getCategory(), new ArrayList<ListItem>());
+                }
+                mapItemsMapWithCategory.get(list_id).get(listItem.getItem().getCategory()).add(listItem);
+                rebuildListWithCategory(list_id);
+            }else{
+                listItemsMap.get(list_id).add(listItem);
+            }
+
+            RecipeItem ri = new RecipeItem(recipe, item, ing.getQty());
+            riList.add(ri);
+            mRecipeItemMap.get(recipe).add(ri);
+        }
+
+        if(mShowCategoryOnMainScreen){
+            rebuildListWithCategory(list_id);
+        }
+
+        ModelFragment.executeAsyncTask(new InsertRecipeWithAllItemsTask(iList, liList, recipe, riList));
+
+    }
+
+    private long findListByName(String name) {
+        for (ShoppingList sl : shoppingLists) {
+            if (sl.getName().equals(name)) {
+                return sl.getId();
+            }
+        }
+        return NOT_FOUND;
+    }
+
+    private class InsertRecipeWithAllItemsTask extends AsyncTask<Void, Void, Void>{
+        private List<Item> items;
+        private List<ListItem> listItems;
+        private Recipe recipe;
+        private List<RecipeItem> riList;
+
+        InsertRecipeWithAllItemsTask(List<Item> items, List<ListItem> listItems, Recipe recipe, List<RecipeItem> riList){
+            this.items=items;
+            this.listItems=listItems;
+            this.riList = riList;
+            this.recipe = recipe;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // try to find the same item in the list
+            for(Item i: itemsMap.values()){
+                for (Item ni : items) {
+                    if (ni.compareTo(i) == 0) {
+                        ni = i;
+                        break;
+                    }
+                }
+            }
+            for (Item ni : items) {
+                if (ni.getId() == 0) {
+                    long newId = dbHelper.insertItem(ni);
+                    ni.setId(newId);
+                    itemsMap.put(newId, ni);
+                    dbHelper.addItemToIntList(ni);
+                }
+            }
+
+            for (ListItem li : listItems) {
+                li.setId(dbHelper.insertListItem(li));
+            }
+
+            recipe.setId(dbHelper.insertRecipe(recipe));
+            for (RecipeItem ri : riList) {
+                ri.setId(dbHelper.insertRecipeItem(ri));
+            }
+
+            return null;
+        }
+
+    }
 
 
+    void deleteRecipeItem(long id, Recipe recipe) {
+        for(int i=0;i<mRecipeItemMap.get(recipe).size();i++){
+            if(mRecipeItemMap.get(recipe).get(i).getId()==id){
+                mRecipeItemMap.get(recipe).get(i).getItem().releaseItem();
+                mRecipeItemMap.get(recipe).remove(i);
+                break;
+            }
+        }
+
+        ModelFragment.executeAsyncTask(new DeleteRecipeItemTask(id));
+
+    }
+
+    private class DeleteRecipeItemTask extends AsyncTask<Void, Void, Void>{
+        private long id;
+
+        DeleteRecipeItemTask(long id){
+            this.id=id;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            dbHelper.deleteRecipeItem(id);
+            return  null;
+        }
+
+    }
+
+    void addExistingRecipeToList(Recipe recipe, String listName) {
+        if(LogGuard.isDebug) Log.d(TAG, "addRecipeToList recipe=" + recipe + ", " + listName);
+
+        //insert list
+        long list_id = findListByName(listName);
+        if (list_id == NOT_FOUND) {
+            list_id = dbHelper.getNextShoppingListId();
+            ShoppingList list = new ShoppingList(listName, list_id);
+            shoppingLists.add(list);
+
+            if(mShowCategoryOnMainScreen){
+                mapItemsMapWithCategory.put(list.getId(), new HashMap<String, List<ListItem>>());
+                listItemsMap.put(list.getId(), new ArrayList<ListItem>());
+            }else{
+                listItemsMap.put(list.getId(), new ArrayList<ListItem>());
+            }
+
+            ModelFragment.executeAsyncTask(new InsertShoppingListTask(list));
+
+        }
+
+        //insert listItems
+        List<ListItem> liList = new ArrayList<>();
+        for (RecipeItem ri : mRecipeItemMap.get(recipe)) {
+            ListItem listItem = new ListItem(list_id, ri.getItem(), ri.getQty());
+            liList.add(listItem);
+
+            if(mShowCategoryOnMainScreen){
+                if(!mapItemsMapWithCategory.get(list_id).containsKey(listItem.getItem().getCategory())){
+                    mapItemsMapWithCategory.get(list_id).put(listItem.getItem().getCategory(), new ArrayList<ListItem>());
+                }
+                mapItemsMapWithCategory.get(list_id).get(listItem.getItem().getCategory()).add(listItem);
+                rebuildListWithCategory(list_id);
+            }else{
+                listItemsMap.get(list_id).add(listItem);
+            }
+        }
+
+        if(mShowCategoryOnMainScreen){
+            rebuildListWithCategory(list_id);
+        }
+
+        ModelFragment.executeAsyncTask(new InsertExistingRecipeToListTask(liList));
+    }
+
+    private class InsertExistingRecipeToListTask extends AsyncTask<Void, Void, Void>{
+        private List<ListItem> listItems;
+
+        InsertExistingRecipeToListTask(List<ListItem> listItems){
+            this.listItems=listItems;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            for (ListItem li : listItems) {
+                li.setId(dbHelper.insertListItem(li));
+            }
+            return null;
+        }
+
+    }
+
+    void deleteRecipe(Recipe recipe) {
+        for (RecipeItem ri : mRecipeItemMap.get(recipe)) {
+            ri.getItem().releaseItem();
+        }
+        for(int i=0;i<mRecipeItemMap.get(recipe).size();i++){
+            mRecipeItemMap.get(recipe).get(i).getItem().releaseItem();
+        }
+        mRecipeItemMap.remove(recipe);
+        ModelFragment.executeAsyncTask(new DeleteRecipeTask(recipe.getId()));
+
+    }
+
+    private class DeleteRecipeTask extends AsyncTask<Void, Void, Void>{
+        private long recipe_id;
+
+        DeleteRecipeTask(long recipe_id){
+            this.recipe_id=recipe_id;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            dbHelper.deleteAllRecipeItemsForRecipe(recipe_id);
+            dbHelper.deleteRecipe(recipe_id);
+            return  null;
+        }
+
+    }
 }
