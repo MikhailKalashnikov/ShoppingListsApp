@@ -1,6 +1,7 @@
 package mikhail.kalashnikov.shoppinglists;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +18,6 @@ import android.content.res.Configuration;
 
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
@@ -435,6 +435,7 @@ public class NavigationDrawerFragment extends Fragment {
             public Dialog onCreateDialog(Bundle savedInstanceState) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(R.string.delete_list_confirmation)
+                        .setInverseBackgroundForced(true)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

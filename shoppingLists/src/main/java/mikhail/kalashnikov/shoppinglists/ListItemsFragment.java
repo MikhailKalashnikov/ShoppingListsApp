@@ -135,12 +135,13 @@ public class ListItemsFragment extends ListFragment
     				public Dialog onCreateDialog(Bundle savedInstanceState) {
     					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
     					builder.setMessage(R.string.clear_list_confirmation)
-    						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dataModel.deleteAllListItemFromListAsync(getShownListId(), false);
-									mAdapter.notifyDataSetChanged();
+								.setInverseBackgroundForced(true)
+								.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										dataModel.deleteAllListItemFromListAsync(getShownListId(), false);
+										mAdapter.notifyDataSetChanged();
 									
 								}
 							})

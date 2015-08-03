@@ -204,7 +204,8 @@ public class EditItemsFragment extends Fragment
 				public Dialog onCreateDialog(Bundle savedInstanceState) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 					builder.setMessage(R.string.item_is_used)
-						.setPositiveButton(android.R.string.ok, null);
+							.setInverseBackgroundForced(true)
+							.setPositiveButton(android.R.string.ok, null);
 					return builder.create();
 				}
 			};

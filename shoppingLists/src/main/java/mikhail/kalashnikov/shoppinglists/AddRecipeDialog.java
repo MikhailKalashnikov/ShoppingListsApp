@@ -59,7 +59,9 @@ public class AddRecipeDialog extends DialogFragment{
 
         });
 
-        builder.setTitle(R.string.pick_a_recipe).setView(view);
+        builder.setTitle(R.string.pick_a_recipe)
+                .setInverseBackgroundForced(true)
+                .setView(view);
         return builder.create();
     }
 

@@ -44,6 +44,7 @@ public class AddNewListDialog extends DialogFragment {
 		}
 		builder
 			.setTitle(newListMode?R.string.add_new_list_title:R.string.edit_list_title)
+				.setInverseBackgroundForced(true)
 			.setView(view)
 			.setPositiveButton(android.R.string.ok, new OnClickListener() {
 				

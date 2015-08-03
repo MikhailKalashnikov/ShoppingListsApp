@@ -151,7 +151,7 @@ public class AddItemToListDialog extends DialogFragment {
 				
 			});
 			
-			builder.setTitle(R.string.mi_add_item).setView(view);
+			builder.setTitle(R.string.mi_add_item).setView(view).setInverseBackgroundForced(true);
 		}
 		
 		return builder.create();

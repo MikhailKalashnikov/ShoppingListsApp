@@ -146,6 +146,7 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 			.setTitle(mMode==MODE_EDIT_ITEM?R.string.edit_item_title:
 					mMode==MODE_EDIT_LIST_ITEM?R.string.edit_list_item_title:
 					R.string.add_new_item_title)
+				.setInverseBackgroundForced(true)
 			.setView(view)
 			.setPositiveButton(android.R.string.ok, new OnClickListener() {
 				

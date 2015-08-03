@@ -105,6 +105,7 @@ public class SelectRecipeParamsDialog extends DialogFragment {
 
         builder
                 .setTitle(R.string.add_recipe_to_list)
+                .setInverseBackgroundForced(true)
                 .setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -157,8 +158,9 @@ public class SelectRecipeParamsDialog extends DialogFragment {
         return new DialogFragment(){
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.pick_a_list)
+                        .setInverseBackgroundForced(true)
                         .setItems(listNames, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -188,8 +190,9 @@ public class SelectRecipeParamsDialog extends DialogFragment {
         return new DialogFragment(){
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.pick_a_category)
+                        .setInverseBackgroundForced(true)
                         .setItems(categoryNames, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

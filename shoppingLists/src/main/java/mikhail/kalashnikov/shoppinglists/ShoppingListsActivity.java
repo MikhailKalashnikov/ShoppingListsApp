@@ -1,5 +1,6 @@
 package mikhail.kalashnikov.shoppinglists;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,18 +12,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -205,7 +200,7 @@ public class ShoppingListsActivity extends AppCompatActivity
         return new DialogFragment() {
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 PackageInfo pInfo = null;
                 try {
                     pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -213,6 +208,7 @@ public class ShoppingListsActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
                 builder.setTitle(R.string.about_title)
+                        .setInverseBackgroundForced(true)
                         .setMessage(getString(R.string.app_name) + " : "
                                 + pInfo.versionName + "\n\n"
                                 + getString(R.string.about_text
@@ -222,11 +218,11 @@ public class ShoppingListsActivity extends AppCompatActivity
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType("text/html");
-                                intent.putExtra(Intent.EXTRA_EMAIL, "mikkalashnikov@gmail.com");
-                                intent.putExtra(Intent.EXTRA_SUBJECT, "ShoppingList App");
+                                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.support_email)});
+                                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
 
                                 if (intent.resolveActivity(getPackageManager()) != null) {
-                                    startActivity(Intent.createChooser(intent, "Send Email"));
+                                    startActivity(Intent.createChooser(intent, getString(R.string.send_email)));
                                 }
 
                             }
