@@ -4,9 +4,9 @@ android {
     signingConfigs {
         config {
             keyAlias 'ShoppingListNew'
-            keyPassword 'm4459n'
+            keyPassword ''
             storeFile file('D:/MK/StudioProjects/keystore')
-            storePassword 'm4459n'
+            storePassword ''
         }
     }
     compileSdkVersion 22
