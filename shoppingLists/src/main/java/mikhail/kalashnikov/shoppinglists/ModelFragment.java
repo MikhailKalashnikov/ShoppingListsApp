@@ -29,7 +29,7 @@ public class ModelFragment extends Fragment implements ShoppingDataListener {
 	synchronized private void uploadData(){
 		if(LogGuard.isDebug) Log.d(TAG, "uploadData = " + model.isDataUploaded());
 		if (model.isDataUploaded()){
-			((ShoppingListModelCallbacks)getActivity()).onUploadData(model.getShoppingList());
+			((ModelCallbacks)getActivity()).onUploadData(model.getShoppingList());
 		}else {
 			model.uploadData(this);
 		}
@@ -62,7 +62,7 @@ public class ModelFragment extends Fragment implements ShoppingDataListener {
 	/**
 	 * Callbacks interface
 	 */
-	public interface ShoppingListModelCallbacks {
+	public interface ModelCallbacks {
 		/**
 		 * Called when data uploaded
 		 */

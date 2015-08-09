@@ -22,7 +22,7 @@ import android.view.View;
 import java.util.List;
 
 public class ShoppingListsActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ModelFragment.ShoppingListModelCallbacks,
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ModelFragment.ModelCallbacks,
             AddNewListDialog.AddNewListDialogListener, AddRecipeDialog.AddRecipeDialogListener{
     private final String TAG = getClass().getSimpleName();
     /**
@@ -122,7 +122,7 @@ public class ShoppingListsActivity extends AppCompatActivity
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.mi_about:
-                getAboutDialog().show(getSupportFragmentManager(), "AboutDialog");
+                (new AboutDialog()).show(getSupportFragmentManager(), "AboutDialog");
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -135,18 +135,6 @@ public class ShoppingListsActivity extends AppCompatActivity
         findViewById(R.id.container).setVisibility(View.VISIBLE);
         mNavigationDrawerFragment.setDrawerAdapter(shoppingLists);
 
-    }
-
-    @Override
-    protected void onStart() {
-        if(LogGuard.isDebug) Log.d(TAG, "onStart");
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        if(LogGuard.isDebug) Log.d(TAG, "onResume");
-        super.onResume();
     }
 
     @Override
@@ -196,41 +184,40 @@ public class ShoppingListsActivity extends AppCompatActivity
         }
     }
 
-    private DialogFragment getAboutDialog() {
-        return new DialogFragment() {
-            @Override
-            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                PackageInfo pInfo = null;
-                try {
-                    pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-                builder.setTitle(R.string.about_title)
-                        .setInverseBackgroundForced(true)
-                        .setMessage(getString(R.string.app_name) + " : "
-                                + pInfo.versionName + "\n\n"
-                                + getString(R.string.about_text
-                        ))
-                        .setNegativeButton(R.string.send_email, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Intent.ACTION_SEND);
-                                intent.setType("text/html");
-                                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.support_email)});
-                                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-
-                                if (intent.resolveActivity(getPackageManager()) != null) {
-                                    startActivity(Intent.createChooser(intent, getString(R.string.send_email)));
-                                }
-
-                            }
-                        })
-                        .setPositiveButton(android.R.string.ok, null);
-
-                return builder.create();
+    public static class AboutDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getActivity().getPackageManager().getPackageInfo(
+                        getActivity().getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
             }
-        };
+            builder.setTitle(R.string.about_title)
+                    .setInverseBackgroundForced(true)
+                    .setMessage(getString(R.string.app_name) + " : "
+                            + pInfo.versionName + "\n\n"
+                            + getString(R.string.about_text
+                    ))
+                    .setNegativeButton(R.string.send_email, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("text/html");
+                            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.support_email)});
+                            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+
+                            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                startActivity(Intent.createChooser(intent, getString(R.string.send_email)));
+                            }
+
+                        }
+                    })
+                    .setPositiveButton(android.R.string.ok, null);
+
+            return builder.create();
+        }
     }
 }

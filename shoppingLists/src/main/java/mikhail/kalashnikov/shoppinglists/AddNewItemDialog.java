@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,7 +157,7 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 						case MODE_ADD_NEW_ITEM:
 							if (mItemNameTextView.getText().toString().trim().length() > 0){
 								try {
-									AddNewItemDialogListener listener = (AddNewItemDialogListener) getTargetFragment();
+									AddNewItemDialogListener listener = (AddNewItemDialogListener) getCallbackListener();
 									listener.onItemAdded(mItemNameTextView.getText().toString(), mQty_types_spinner.getSelectedItem().toString(), 
 											mItemCategoryTextView.getText().toString());
 						        } catch (ClassCastException e) {
@@ -168,7 +169,7 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 						case MODE_EDIT_ITEM:
 							if(isItemUpdated()){
 								try {
-									EditItemDialogListener listener = (EditItemDialogListener) getTargetFragment();
+									EditItemDialogListener listener = (EditItemDialogListener) getCallbackListener();
 									listener.onItemEdited(mItemNameTextView.getText().toString(), mQty_types_spinner.getSelectedItem().toString(),
 											mItemCategoryTextView.getText().toString(), getArguments().getLong(KEY_ITEM_ID));
 						        } catch (ClassCastException e) {
@@ -180,7 +181,7 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 						case MODE_EDIT_LIST_ITEM:
 							if(isListItemUpdated() || isItemUpdated()){
 								try {
-									EditListItemDialogListener listener = (EditListItemDialogListener) getTargetFragment();
+									EditListItemDialogListener listener = (EditListItemDialogListener) getCallbackListener();
 									//listener.onListItemEdited(qty.getText().toString(), getArguments().getLong(KEY_LIST_ITEM_ID), 
 									//		getArguments().getLong(KEY_LIST_ID), done.isChecked()?1:0);
 									listener.onListItemWithItemEdited(mItemQtyTextView.getText().toString(), getArguments().getLong(KEY_LIST_ITEM_ID), 
@@ -227,4 +228,19 @@ public class AddNewItemDialog extends DialogFragment implements OnEditorActionLi
 		}
 		return true;
 	}
+
+	private Fragment getCallbackListener() {
+		Fragment listener = getTargetFragment();
+		if (listener == null) {
+			listener = getActivity().getSupportFragmentManager().findFragmentByTag("ListItemsFragment");
+		}
+
+		return listener;
+	}
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        setTargetFragment(null, -1);
+    }
 }

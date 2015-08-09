@@ -27,7 +27,9 @@ import mikhail.kalashnikov.shoppinglists.recipeparser.Ingredient;
 import mikhail.kalashnikov.shoppinglists.recipeparser.RecipeResult;
 import mikhail.kalashnikov.shoppinglists.recipeparser.RecipeURLParser;
 
-public class AddRecipe extends AppCompatActivity implements SelectRecipeParamsDialog.AddRecipeToListDialogListener{
+public class AddRecipe extends AppCompatActivity
+        implements SelectRecipeParamsDialog.AddRecipeToListDialogListener,
+            ModelFragment.ModelCallbacks{
     private final String TAG = getClass().getSimpleName();
     private Button mAddRecipe;
     private ProgressBar mProgressBar;
@@ -39,15 +41,30 @@ public class AddRecipe extends AppCompatActivity implements SelectRecipeParamsDi
     private boolean mUseDefaultListAndCategory;
     private boolean mUseRecipeName;
     private boolean mUseCayegory;
+    private static final String MODEL="model";
+    private boolean mFromMainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        ModelFragment model = null;
+        if (getSupportFragmentManager().findFragmentByTag(MODEL)==null) {
+            model = new ModelFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(model, MODEL)
+                    .commit();
+        }else{
+            model = (ModelFragment)getSupportFragmentManager().findFragmentByTag(MODEL);
+        }
+
         String url = null;
         if (intent != null && intent.getAction() != null
                 && intent.getAction().equals("android.intent.action.SEND")) {
             url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            mFromMainActivity = false;
+        } else {
+            mFromMainActivity = true;
         }
         readPreferences();
         setContentView(R.layout.activity_add_recipe);
@@ -189,7 +206,15 @@ public class AddRecipe extends AppCompatActivity implements SelectRecipeParamsDi
     private void insertRecipeAndFinish(String recipeName, String listName, String categoryName) {
         DataModel.getInstance(getApplicationContext()).insertRecipeAsync(
                 recipeName, listName, categoryName, mAdapter.getItems());
+        if (!mFromMainActivity) {
+            startActivity(new Intent(this, ShoppingListsActivity.class));
+        }
         finish();
+    }
+
+    @Override
+    public void onUploadData(List<ShoppingList> shoppingLists) {
+
     }
 
     private class ParseRecipeTask extends AsyncTask<String, Void, RecipeResult> {

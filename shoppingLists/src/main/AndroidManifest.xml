@@ -52,7 +52,13 @@
         <activity
             android:name=".AddRecipe"
             android:label="@string/title_activity_add_recipe"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:parentActivityName=".ShoppingListsActivity" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mikhail.kalashnikov.shoppinglists.ShoppingListsActivity" />
+            >
             <intent-filter
                 android:label="@string/intent_add_recipe">
                 <action android:name="android.intent.action.SEND"/>

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup; 
@@ -160,8 +161,7 @@ public class AddItemToListDialog extends DialogFragment {
 
 	private void addItemToList(Item item){
 		try {
-			AddItemToListDialogListener listener = (AddItemToListDialogListener) getTargetFragment();
-			listener.onItemAddedToList(item);
+            ((AddItemToListDialogListener)getCallbackListener()).onItemAddedToList(item);
 			dismiss();
         } catch (ClassCastException e) {
             throw new ClassCastException(getTargetFragment().toString()
@@ -171,11 +171,20 @@ public class AddItemToListDialog extends DialogFragment {
 	
 	private void showAddNewItemDialog(){
 		DialogFragment addNewItemDialog = AddNewItemDialog.newInstance();
-		addNewItemDialog.setTargetFragment(getTargetFragment(), 0);
+		addNewItemDialog.setTargetFragment(getCallbackListener(), 0);
 		addNewItemDialog.show(getActivity().getSupportFragmentManager(), "AddNewItemDialog");
         dismiss();
 	}
-	
+
+    private Fragment getCallbackListener() {
+        Fragment listener = getTargetFragment();
+        if (listener == null) {
+            listener = getActivity().getSupportFragmentManager().findFragmentByTag("ListItemsFragment");
+        }
+
+        return listener;
+    }
+
 	private List<Map<String,Item>> buildChildDataItem(List<Item> groupItems){
     	List<Map<String,Item>> childDataItem = new ArrayList<Map<String,Item>>();
     	for(Item i: groupItems){
@@ -185,6 +194,11 @@ public class AddItemToListDialog extends DialogFragment {
     	}
     	return childDataItem;
     }
-	
-	
+
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+        setTargetFragment(null, -1);
+    }
 }

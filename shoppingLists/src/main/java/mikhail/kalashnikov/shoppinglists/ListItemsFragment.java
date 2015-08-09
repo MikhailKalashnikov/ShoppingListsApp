@@ -182,6 +182,7 @@ public class ListItemsFragment extends ListFragment
         }
     }
 
+
     class ShoppingListAdapter extends ArrayAdapter<ListItem>
 		implements PinnedSectionListAdapter {
 		ListItem removedListItem= null;
