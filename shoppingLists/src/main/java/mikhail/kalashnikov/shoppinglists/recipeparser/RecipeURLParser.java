@@ -44,13 +44,14 @@ public class RecipeURLParser {
 		}
 
 		if (host.equalsIgnoreCase("andychef.ru")
-			|| host.equalsIgnoreCase("jamieoliver.com")
-			|| host.equalsIgnoreCase("allrecipes.com")
-			|| host.equalsIgnoreCase("recipe.com")
-			|| host.equalsIgnoreCase("gotovim.ru")
-			|| host.equalsIgnoreCase("gotovim-doma.ru")
-			|| host.equalsIgnoreCase("eda.ru")
-			|| host.equalsIgnoreCase("food.com")) {
+                || host.equalsIgnoreCase("jamieoliver.com")
+			    || host.equalsIgnoreCase("allrecipes.com")
+                || host.equalsIgnoreCase("recipe.com")
+                || host.equalsIgnoreCase("gotovim.ru")
+                || host.equalsIgnoreCase("gotovim-doma.ru")
+                || host.equalsIgnoreCase("eda.ru")
+                || host.equalsIgnoreCase("food.com")
+                || host.equalsIgnoreCase("gastronom.ru")) {
 			return CheckUrlResult.OK;
 		} else {
 			return CheckUrlResult.URL_NOT_SUPPORTED;
@@ -89,6 +90,8 @@ public class RecipeURLParser {
 				resUrl = urlStr + "?mode=metric";
 			}
 			parser = new RecipeParserFoodCom();
+		} else if (host.equalsIgnoreCase("gastronom.ru")) {
+            parser = new RecipeParserGastronomRu();
 		} else {
 			throw new UnsupportedWebSite("unsupported web site " + host);
 		}
